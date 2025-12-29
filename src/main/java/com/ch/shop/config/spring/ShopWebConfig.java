@@ -93,14 +93,14 @@ public class ShopWebConfig extends WebMvcConfigurerAdapter{
 		
 		//네이버등록
 		OAuthClient naver = new OAuthClient();
-		google.setProvider("naver");
-		google.setClientId(naverClientId);
-		google.setClientSecret(naverClientSecret);
-		google.setAuthorizeUrl("https://nid.naver.com/oauth2.0/authorize"); //google api 문서에 나와있다..
-		google.setTokenUrl("https://nid.naver.com/oauth2.0/token");//토큰을 요청할 주소 
-		google.setUserInfoUrl("https://openapi.naver.com/v1/nid/me");
-		google.setScope("name email");//사용자에 대한 정보의 접근 범위 
-		google.setRedirectUri("http://localhost:8888/login/callback/naver");
+		naver.setProvider("naver");
+		naver.setClientId(naverClientId);
+		naver.setClientSecret(naverClientSecret);
+		naver.setAuthorizeUrl("https://nid.naver.com/oauth2.0/authorize"); //google api 문서에 나와있다..
+		naver.setTokenUrl("https://nid.naver.com/oauth2.0/token");//토큰을 요청할 주소 
+		naver.setUserInfoUrl("https://openapi.naver.com/v1/nid/me");
+		naver.setScope("name email");//사용자에 대한 정보의 접근 범위 
+		naver.setRedirectUri("http://localhost:8888/login/callback/naver");
 		
 		map.put("naver", naver);
 		
@@ -111,22 +111,3 @@ public class ShopWebConfig extends WebMvcConfigurerAdapter{
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
