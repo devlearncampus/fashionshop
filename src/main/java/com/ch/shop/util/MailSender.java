@@ -1,7 +1,6 @@
 package com.ch.shop.util;
 
 import java.util.Properties;
-
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -14,10 +13,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import com.ch.shop.exception.EmailException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class MailSender {
 	String host = "smtp.gmail.com";
-	String user = "devlearncampus@gmail.com";
+	String user = "devlearncampus@gmail.com"; //보내는 자 
 	String password;
 	Properties props = new Properties();
 	
@@ -28,6 +30,9 @@ public class MailSender {
 	}
 	
 	public void send(String to, String title, String content ) {
+		
+		log.debug("JNDI로 가져온 비번은 {}", password);
+		
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.port", 465);
 		props.put("mail.smtp.auth", "true");

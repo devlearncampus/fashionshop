@@ -30,6 +30,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableTransactionManagement
 public class RootConfig  extends WebMvcConfigurerAdapter{
 
+	/*context.xml 등에 명시된 외부 자원을 JNDI방식으로 읽어들일 수 있는 스프링의 객체*/
+	@Bean
+	public JndiTemplate jndiTemplate() {
+		return new JndiTemplate();
+	}
+	
 	//DispatcherServlet이 하위 컨트롤러로 부터 반환받은 결과 페이지에 대한 정보는 사실 완전한 JSP경로가 아니므로, 
 	//이를 해석할 수 있는 자인 ViewResolver에게 맡겨야 하는데, 이 ViewResolver 중  유달리 접두어와 접미어 방식을 이해하는 
 	//뷰리절버를 InternalResourceViewResolver라고 한다..개발자는 이 객체에게 접두어와 접미어를 사전에 등록해 놓아야 한다 
@@ -121,4 +127,14 @@ public class RootConfig  extends WebMvcConfigurerAdapter{
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 
+	/*----------------------------------------------------
+	 메일에 사용될 비밀번호를 가진 빈 등록  
+	----------------------------------------------------*/
+	@Bean
+	public String emailPassword(JndiTemplate jndiTemplate) throws Exception {
+		return (String)jndiTemplate.lookup("java:comp/env/email/app/password");
+	}
+	
+	
+	
 }

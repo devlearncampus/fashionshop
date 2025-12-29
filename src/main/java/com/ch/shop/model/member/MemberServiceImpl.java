@@ -2,8 +2,10 @@ package com.ch.shop.model.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ch.shop.dto.Member;
+import com.ch.shop.util.MailSender;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +16,10 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	private MemberDAO memberDAO;
 	
-	@Override
+	@Autowired
+	private MailSender mailSender;
+	
+	@Transactional
 	public void registOrUpdate(Member member) {
 		
 		//회원이 존재하는지 먼저 따져보자 
@@ -22,6 +27,7 @@ public class MemberServiceImpl implements MemberService{
 		
 		if(obj==null) {
 			memberDAO.insert(member);//회원가입이 안되어 있을 경우만..
+			mailSender.send(member.getEmail(), "패션샵 회원가입을 축하드립니다", "감사합니다.");
 			log.debug("신규 회원 가입 처리");
 			//이메일 발송 예정 (카카오의 경우만 제외..)			
 		}else {
