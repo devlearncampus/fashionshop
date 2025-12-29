@@ -50,6 +50,19 @@ public class ShopWebConfig extends WebMvcConfigurerAdapter{
 		return (String)jndiTemplate.lookup("java:comp/env/google/client/secret"); 
 	}
 
+	/*--------------------------------------------------
+	naver 
+	--------------------------------------------------*/
+	@Bean
+	public String naverClientId(JndiTemplate jndiTemplate ) throws Exception{
+		return (String)jndiTemplate.lookup("java:comp/env/naver/client/id"); 
+	}
+	
+	@Bean
+	public String naverClientSecret(JndiTemplate jndiTemplate) throws Exception{
+		return (String)jndiTemplate.lookup("java:comp/env/naver/client/secret"); 
+	}
+
 	/*
 	 * Oauth 로그인 시 사용되는 환경 변수(요청주소, 콜백주소..등등)는 객체로 담아서 관리하면 유지하기 좋다
 	 * 우리의 경우 여러 프로바이더를 연동할 것이므로, OAuthClient 객체를 여러개 메모리에 보관해놓자
@@ -57,7 +70,9 @@ public class ShopWebConfig extends WebMvcConfigurerAdapter{
 	@Bean
 	public Map<String, OAuthClient> oauthClients(
 			@Qualifier("googleClientId") String googleClientId, 
-			@Qualifier("googleClientSecret") String googleClientSecret			
+			@Qualifier("googleClientSecret") String googleClientSecret,			
+			@Qualifier("naverClientId") String naverClientId, 
+			@Qualifier("naverClientSecret") String naverClientSecret			
 			){
 		
 		//구글, 네이버, 카카오를 각각 OAuthClient 인스턴스 담은 후, 다시 Map에 모아두자  
@@ -77,6 +92,18 @@ public class ShopWebConfig extends WebMvcConfigurerAdapter{
 		map.put("google", google);
 		
 		//네이버등록
+		OAuthClient naver = new OAuthClient();
+		google.setProvider("naver");
+		google.setClientId(naverClientId);
+		google.setClientSecret(naverClientSecret);
+		google.setAuthorizeUrl("https://nid.naver.com/oauth2.0/authorize"); //google api 문서에 나와있다..
+		google.setTokenUrl("https://nid.naver.com/oauth2.0/token");//토큰을 요청할 주소 
+		google.setUserInfoUrl("https://openapi.naver.com/v1/nid/me");
+		google.setScope("name email");//사용자에 대한 정보의 접근 범위 
+		google.setRedirectUri("http://localhost:8888/login/callback/naver");
+		
+		map.put("naver", naver);
+		
 		
 		//카카오 등록 
 		
