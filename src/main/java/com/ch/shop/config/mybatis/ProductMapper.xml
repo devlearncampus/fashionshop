@@ -60,8 +60,7 @@
 	<!-- 하위 카테고리에 소속된 상품만 가져오기 -->
 	<select id="selectBySubCategoryId" parameterType="int" resultMap="productMap">
 		<include refid="sql_select"/>
-		<!-- mybatis의 where 태그를 사용하면 조건이 없을 경우 where 절이 동적으로 사라지고, 조건이 있으면 where 문이
-		동적으로 sql에 포함된다.. -->
+		<!-- mybatis의 where 태그를 사용하면 조건이 없을 경우 where 절이 동적으로 사라지고, 조건이 있으면 where 문이 동적으로 sql에 포함된다.. -->
 		<where>
 			<if test="_parameter!=0">
 				subcategory_id=#{subcategory_id}
