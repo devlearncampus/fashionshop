@@ -32,8 +32,7 @@
 			다른 테이블의 레코드 1건을 가져오기 
 			association 이란? 부모의 레코드를 가져오는 기능을 말하며, 자식과 부모의 1:1 관계에서 사용 
 		-->	
-		<association column="subcategory_id" property="subCategory" javaType="SubCategory" 
-			select="SubCategory.select"/>
+		<association column="subcategory_id" property="subCategory" javaType="SubCategory" select="SubCategory.select"/>
 	
 		<!-- 
 			collection 이란? 여러건의 자식 레코드를 가져올 수 있는 mybatis의 기능 		
@@ -46,13 +45,29 @@
 		 	/>
 	</resultMap>
 	
-	<!-- 모든 상품 가져오기  -->
-	<select id="selectAll" resultMap="productMap">
+	<!-- 공통 쿼리를 정의 -->
+	<sql id="sql_select">
 		select product_id, product_name, brand, price, discount, 
 		introduce, detail, subcategory_id
-		from product
+		from product		
+	</sql>
+	
+	<!-- 모든 상품 가져오기  -->
+	<select id="selectAll" resultMap="productMap">
+		<include refid="sql_select"/>
 	</select>
 
+	<!-- 하위 카테고리에 소속된 상품만 가져오기 -->
+	<select id="selectBySubCategoryId" parameterType="int" resultMap="productMap">
+		<include refid="sql_select"/>
+		<!-- mybatis의 where 태그를 사용하면 조건이 없을 경우 where 절이 동적으로 사라지고, 조건이 있으면 where 문이
+		동적으로 sql에 포함된다.. -->
+		<where>
+			<if test="_parameter!=0">
+				subcategory_id=#{subcategory_id}
+			</if>				
+		</where>
+	</select>
 
 </mapper>
 

@@ -1,5 +1,11 @@
+<%@page import="com.ch.shop.util.MoneyConverter"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="com.ch.shop.dto.SubCategory" %>
+<%@ page import="com.ch.shop.dto.Product" %>
+<% 
+	//ProductController 에서 저장해놓은, productList를 꺼내서 사용해보자 
+	List<Product> productList=(List)request.getAttribute("productList");
+%>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -192,19 +198,19 @@
 		                </div>
 		                <div class="col-lg-9 col-md-9">
 		                    <div class="row">
-		                    
+		                    	<%for(Product product : productList){%>
 		                        <div class="col-lg-4 col-md-6">
 		                            <div class="product__item">
-		                                <div class="product__item__pic set-bg" data-setbg="/static/template/img/shop/shop-1.jpg" style="background-image: url(&quot;img/shop/shop-1.jpg&quot;);">
+		                                <div class="product__item__pic set-bg" data-setbg="/photo/p<%=product.getProduct_id()%>/<%=product.getProductImgList().get(0).getFilename() %>" style="background-image: url(&quot;img/shop/shop-1.jpg&quot;);">
 		                                    <div class="label new">New</div>
 		                                    <ul class="product__hover">
-		                                        <li><a href="/static/template/img/shop/shop-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
+		                                        <li><a href="/photo/p<%=product.getProduct_id()%>/<%=product.getProductImgList().get(0).getFilename() %>" class="image-popup"><span class="arrow_expand"></span></a></li>
 		                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
 		                                        <li><a href="#"><span class="icon_bag_alt"></span></a></li>
 		                                    </ul>
 		                                </div>
 		                                <div class="product__item__text">
-		                                    <h6><a href="#">Furry hooded parka</a></h6>
+		                                    <h6><a href="#"><%=product.getProduct_name() %></a></h6>
 		                                    <div class="rating">
 		                                        <i class="fa fa-star"></i>
 		                                        <i class="fa fa-star"></i>
@@ -212,11 +218,11 @@
 		                                        <i class="fa fa-star"></i>
 		                                        <i class="fa fa-star"></i>
 		                                    </div>
-		                                    <div class="product__price">$ 59.0</div>
+		                                    <div class="product__price"><%=MoneyConverter.format(product.getPrice()) %></div>
 		                                </div>
 		                            </div>
 		                        </div>
-		                        
+		                        <%} %>
 		                        <div class="col-lg-12 text-center">
 		                            <div class="pagination__option">
 		                                <a href="#">1</a>
