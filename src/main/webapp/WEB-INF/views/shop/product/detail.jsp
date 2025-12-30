@@ -4,6 +4,7 @@
 <%@ page import="com.ch.shop.dto.Product" %>
 <%@ page import="com.ch.shop.dto.ProductImg" %>
 <%@ page import="com.ch.shop.dto.Color" %>
+<%@ page import="com.ch.shop.dto.Size" %>
 <% 
 	Product product=(Product)request.getAttribute("product");
 %>
@@ -142,22 +143,12 @@
 	                                <li>
 	                                    <span>Available size:</span>
 	                                    <div class="size__btn">
-	                                        <label for="xs-btn" class="active">
-	                                            <input type="radio" id="xs-btn">
-	                                            xs
+	           								<%for( Size size : product.getSizeList()){%>                             
+	                                        <label for="<%=size.getSize_name() %>-btn" class="active">
+	                                            <input type="radio" id="<%=size.getSize_name() %>-btn">
+	                                            <%=size.getSize_name() %>
 	                                        </label>
-	                                        <label for="s-btn">
-	                                            <input type="radio" id="s-btn">
-	                                            s
-	                                        </label>
-	                                        <label for="m-btn">
-	                                            <input type="radio" id="m-btn">
-	                                            m
-	                                        </label>
-	                                        <label for="l-btn">
-	                                            <input type="radio" id="l-btn">
-	                                            l
-	                                        </label>
+											<%} %>
 	                                    </div>
 	                                </li>
 	                                <li>
@@ -184,16 +175,7 @@
 	                        <div class="tab-content">
 	                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
 	                                <h6>Description</h6>
-	                                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
-	                                    quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
-	                                    Neque porro lorem quisquam est, qui dolorem ipsum quia dolor si. Nemo enim ipsam
-	                                    voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed quia ipsu
-	                                    consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Nulla
-	                                consequat massa quis enim.</p>
-	                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-	                                    dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
-	                                    nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
-	                                quis, sem.</p>
+	                                <p><%=product.getDetail()%></p>
 	                            </div>
 	                            <div class="tab-pane" id="tabs-2" role="tabpanel">
 	                                <h6>Specification</h6>
