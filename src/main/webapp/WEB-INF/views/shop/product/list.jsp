@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page import="com.ch.shop.dto.SubCategory" %>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -61,17 +62,14 @@
 		                                    <%TopCategory topCategory=topList.get(i); %>
 		                                    <div class="card">
 		                                        <div class="card-heading">
-		                                            <a data-toggle="collapse" data-target="#collapseOne" class="collapsed" aria-expanded="false"><%=topCategory.getTopname() %></a>
+		                                            <a data-toggle="collapse" data-target="#collapse<%=i%>" class="collapsed" aria-expanded="false"><%=topCategory.getTopname() %></a>
 		                                        </div>
-		                                        <div id="collapseOne" class="collapse" data-parent="#accordionExample" style="">
+		                                        <div id="collapse<%=i%>" class="collapse" data-parent="#accordionExample" style="">
 		                                            <div class="card-body">
 		                                                <ul>
-		                                                    <li><a href="#">Coats</a></li>
-		                                                    <li><a href="#">Jackets</a></li>
-		                                                    <li><a href="#">Dresses</a></li>
-		                                                    <li><a href="#">Shirts</a></li>
-		                                                    <li><a href="#">T-shirts</a></li>
-		                                                    <li><a href="#">Jeans</a></li>
+		                                                    <%for(SubCategory subCategory : topCategory.getSubList()){%>
+		                                                    <li><a href="#"><%=subCategory.getSubname() %></a></li>
+		                                                    <%} %>
 		                                                </ul>
 		                                            </div>
 		                                        </div>
