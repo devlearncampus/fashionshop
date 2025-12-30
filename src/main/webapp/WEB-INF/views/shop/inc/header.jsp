@@ -1,4 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page import="com.ch.shop.dto.TopCategory"%>
+<%@ page import="java.util.List" %>
+<%
+	List<TopCategory> topList = (List)request.getAttribute("topList");
+%>
 <%@ page import="com.ch.shop.dto.Member" %>
     <header class="header">
         <div class="container-fluid">
