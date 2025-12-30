@@ -50,7 +50,7 @@
 	<select id="selectAll" resultMap="productMap">
 		select product_id, product_name, brand, price, discount, 
 		introduce, detail, subcategory_id
-		from product		
+		from product
 	</select>
 
 
