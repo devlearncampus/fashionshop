@@ -3,8 +3,7 @@
 <%@ page import="com.ch.shop.dto.SubCategory" %>
 <%@ page import="com.ch.shop.dto.Product" %>
 <% 
-	//ProductController 에서 저장해놓은, productList를 꺼내서 사용해보자 
-	List<Product> productList=(List)request.getAttribute("productList");
+	Product product=(Product)request.getAttribute("product");
 %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -84,7 +83,7 @@
 	                </div>
 	                <div class="col-lg-6">
 	                    <div class="product__details__text">
-	                        <h3>Essential structured blazer <span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
+	                        <h3><%=product.getProduct_name() %> <span>Brand: <%=product.getBrand() %></span></h3>
 	                        <div class="rating">
 	                            <i class="fa fa-star"></i>
 	                            <i class="fa fa-star"></i>
@@ -93,7 +92,7 @@
 	                            <i class="fa fa-star"></i>
 	                            <span>( 138 reviews )</span>
 	                        </div>
-	                        <div class="product__details__price">$ 75.0 <span>$ 83.0</span></div>
+	                        <div class="product__details__price"><%=MoneyConverter.format(product.getPrice()) %> <span><%=MoneyConverter.format(product.getDiscount()) %></span></div>
 	                        <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
 	                        magni lores eos qui ratione voluptatem sequi nesciunt.</p>
 	                        <div class="product__details__button">
