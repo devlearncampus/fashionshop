@@ -1,0 +1,43 @@
+<meta charset="UTF-8">
+<script>
+	
+	let p=new Promise( function(resolve, reject){
+		//비동기로 처리하고픈 코드 작성....
+		setTimeout(function(){
+			resolve();
+		}, 1000);
+	}).then(function(){
+		console.log("첫번째 업무가 성공되었네요");
+		return new Promise(function(resolve, reject){
+			resolve();
+		});
+	})
+	.then(function(){
+		console.log("두번째 업무가 성공되었어요");
+	})
+	.catch(function(){
+		console.log("실패했어요");
+	});
+	 
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
