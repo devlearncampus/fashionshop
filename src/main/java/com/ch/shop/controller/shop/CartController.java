@@ -1,36 +1,43 @@
 package com.ch.shop.controller.shop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ch.shop.dto.Cart;
-import com.ch.shop.dto.Member;
+import com.ch.shop.dto.ResponseMessage;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class CartController {
 	
+	
 	//장바구니 메인 요청 처리 
 	@GetMapping("/cart/main")
-	public String getMain(HttpSession session) {
+	public String getMain(HttpSession session, Model model) {
+		Map<Integer, Cart> cart=(Map)session.getAttribute("cart");
 		
-		String viewName="";
+		List<Cart> cartList = new ArrayList();
 		
-		//로그인 세션 체크 
-		Member member=(Member)session.getAttribute("member");
-		
-		if(member ==null) {//로그인 하지 않은 경우...
-			viewName="shop/member/login";//로그인 폼을 보여줌 
-		}else {//로그인 한 경우..
-			viewName="shop/cart/list";//장바구니를 보여줌 
+		for(Map.Entry<Integer, Cart> entry : cart.entrySet()) {
+			cartList.add(entry.getValue());
 		}
+		model.addAttribute("cartList", cartList);
 		
-		return viewName;
+		return "shop/cart/list";
 	}
 	
 	/*
@@ -51,26 +58,35 @@ public class CartController {
                                                  않아도 됨(마침 쿠키처럼)
                                          단점 - 메모리 용량이 많이 차지                                                                                                          		
 	 * */
-	@GetMapping("/cart/add")
-	public String addCart(@RequestParam(defaultValue="0") int product_id , HttpSession session) {
+	@PostMapping("/cart/add")
+	@ResponseBody
+	public ResponseEntity<ResponseMessage> addCart(Cart obj , HttpSession session) {
+		
+		log.debug("product_id is {}", obj.getProduct_id());
+		log.debug("product_name is {}", obj.getProduct_name());
+		log.debug("filename is {}", obj.getFilename());
+		log.debug("price is {}", obj.getPrice());
+		log.debug("ea is {}", obj.getEa());
+		
 		
 		//클라이언트가 전송한 상품의 product_id, 갯수를 이용하여 Cart 생성하고 보관...
 		//그리고 이 생성된 Cart 인스턴스를 세션에 저장...
-		Cart cart = new Cart();
-
-		cart.setProduct_id(product_id);
-		cart.setEa(0); //넘겨받을 예정 
-		cart.setProduct_name(null); //상품명을 넘겨 받아야 함 
-		cart.setFilename(null);//넘겨받을 예정 
-		cart.setPrice(0);//넘겨받을 예정  
+		Map cart=null;
 		
-		Map map = new HashMap<Integer, Cart>();
+		if(session.getAttribute("cart") ==null) { //한번도 담은 적이 없다면 
+			cart = new HashMap<Integer, Cart>();//맵 새로 생성하고  
+			session.setAttribute("cart", cart); // 생성된 맵을 세션에 담기 
+		}else {
+			cart = (Map)session.getAttribute("cart"); //이미 있으면 얻어오기 
+		}
 		
-		session.setAttribute("cart", map);
+		cart.put(obj.getProduct_id(), obj);
+		ResponseMessage msg = new ResponseMessage();
+		msg.setMsg("등록성공");
 		
-		return null;
+		//ResponseEntity.status(HttpStatus.OK).body("등록 성공")
+		return ResponseEntity.ok(msg);
 	} 
-	
 	
 }
 

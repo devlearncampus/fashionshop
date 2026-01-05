@@ -18,15 +18,26 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		
-		//현재 요청에 연계된 세션 얻기 
 		HttpSession session = request.getSession();
 		
-		//로그인 하지 않았을 경우, 가던길 가는게 아니라, 로그인 폼으로 강제전환 
-		if(session==null || session.getAttribute("member")==null) {
-			response.sendRedirect("/member/loginform");
-			return false;
+		if(session ==null || session.getAttribute("member")==null) {			
+	        // Ajax 요청인지 확인
+	        String ajaxHeader = request.getHeader("X-Requested-With");
+	        
+	        boolean isAjax = "XMLHttpRequest".equals(ajaxHeader);
+
+	        if (isAjax) {
+	            // JSON 응답으로 로그인 필요 알림
+	            response.setContentType("application/json; charset=UTF-8");
+	            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	            response.getWriter().write("{\"msg\":\"로그인이 필요한 서비스입니다\"}");
+	        } else {
+	            // 일반 요청이면 기존 리다이렉트
+	            response.sendRedirect(request.getContextPath() + "/member/loginform");
+	        }
+	        return false; // 컨트롤러 진입 차단
 		}
-		//원래 요청을 그대로 진행하고 싶다면 true, 진행을 막으려면 false
+		//그렇지 않은 경우 컨트롤러 수행   
 		return true;
 	}
 

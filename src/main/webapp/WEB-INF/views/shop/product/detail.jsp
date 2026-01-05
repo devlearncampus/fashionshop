@@ -105,75 +105,85 @@
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-lg-6">
-	                    <div class="product__details__text">
-	                        <h3><%=product.getProduct_name() %> <span>Brand: <%=product.getBrand() %></span></h3>
-	                        <div class="rating">
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <i class="fa fa-star"></i>
-	                            <span>( 138 reviews )</span>
-	                        </div>
-	                        <div class="product__details__price"><%=MoneyConverter.format(product.getPrice()) %> <span><%=MoneyConverter.format(product.getDiscount()) %></span></div>
-	                        <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
-	                        magni lores eos qui ratione voluptatem sequi nesciunt.</p>
-	                        <div class="product__details__button">
-	                            <div class="quantity">
-	                                <span>Quantity:</span>
-	                                <div class="pro-qty"><span class="dec qtybtn">-</span>
-	                                    <input type="text" value="1">
-	                                <span class="inc qtybtn">+</span></div>
-	                            </div>
-	                            <a href="javascript:addCart(<%=product.getProduct_id()%>)" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
-	                            <ul>
-	                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-	                                <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
-	                            </ul>
-	                        </div>
-	                        <div class="product__details__widget">
-	                            <ul>
-	                                <li>
-	                                    <span>Availability:</span>
-	                                    <div class="stock__checkbox">
-	                                        <label for="stockin">
-	                                            In Stock
-	                                            <input type="checkbox" id="stockin">
-	                                            <span class="checkmark"></span>
-	                                        </label>
-	                                    </div>
-	                                </li>
-	                                <li>
-	                                    <span>Available color:</span>
-	                                    <div class="color__checkbox">
-											<%for(Color color : product.getColorList()){%>
-	                                        <label for="<%=color.getColor_name() %>">
-	                                            <input type="radio" name="color__radio" id="<%=color.getColor_name() %>" checked="">
-	                                            <span class="checkmark"></span>
-	                                        </label>
-											<%} %>	
-	                                    </div>
-	                                </li>
-	                                <li>
-	                                    <span>Available size:</span>
-	                                    <div class="size__btn">
-	           								<%for( Size size : product.getSizeList()){%>                             
-	                                        <label for="<%=size.getSize_name() %>-btn" class="active">
-	                                            <input type="radio" id="<%=size.getSize_name() %>-btn">
-	                                            <%=size.getSize_name() %>
-	                                        </label>
-											<%} %>
-	                                    </div>
-	                                </li>
-	                                <li>
-	                                    <span>Promotions:</span>
-	                                    <p>Free shipping</p>
-	                                </li>
-	                            </ul>
-	                        </div>
-	                    </div>
-	                </div>
+	                
+	                <form id="detail-form">
+	                	<input type="hidden" name="product_id" 		value="<%=product.getProduct_id()%>">
+	                	<input type="hidden" name="product_name" 	value="<%=product.getProduct_name()%>">
+	                	<input type="hidden" name="filename" 			value="<%=product.getProductImgList().get(0).getFilename() %>">
+	                	<input type="hidden" name="price" 				value="<%=product.getPrice()%>">
+	                	
+		                <div class="col-lg-6">
+		                    <div class="product__details__text">
+		                        <h3><%=product.getProduct_name() %> <span>Brand: <%=product.getBrand() %></span></h3>
+		                        <div class="rating">
+		                            <i class="fa fa-star"></i>
+		                            <i class="fa fa-star"></i>
+		                            <i class="fa fa-star"></i>
+		                            <i class="fa fa-star"></i>
+		                            <i class="fa fa-star"></i>
+		                            <span>( 138 reviews )</span>
+		                        </div>
+		                        <div class="product__details__price"><%=MoneyConverter.format(product.getPrice()) %> <span><%=MoneyConverter.format(product.getDiscount()) %></span></div>
+		                        <p><%=product.getIntroduce() %></p>
+		                        <div class="product__details__button">
+		                            
+		                            <div class="quantity">
+		                                <span>Quantity:</span>
+		                                <div class="pro-qty">	                                	
+		                                    <input type="text" value="1" name="ea">	                                	
+		                                </div>
+		                            </div>
+		                            
+		                            <a href="javascript:addCart(<%=product.getProduct_id()%>)" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+		                            <ul>
+		                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+		                                <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+		                            </ul>
+		                        </div>
+		                        <div class="product__details__widget">
+		                            <ul>
+		                                <li>
+		                                    <span>Availability:</span>
+		                                    <div class="stock__checkbox">
+		                                        <label for="stockin">
+		                                            In Stock
+		                                            <input type="checkbox" id="stockin">
+		                                            <span class="checkmark"></span>
+		                                        </label>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <span>Available color:</span>
+		                                    <div class="color__checkbox">
+												<%for(Color color : product.getColorList()){%>
+		                                        <label for="<%=color.getColor_name() %>">
+		                                            <input type="radio" name="color__radio" id="<%=color.getColor_name() %>" checked="">
+		                                            <span class="checkmark"></span>
+		                                        </label>
+												<%} %>	
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <span>Available size:</span>
+		                                    <div class="size__btn">
+		           								<%for( Size size : product.getSizeList()){%>                             
+		                                        <label for="<%=size.getSize_name() %>-btn" class="active">
+		                                            <input type="radio" id="<%=size.getSize_name() %>-btn">
+		                                            <%=size.getSize_name() %>
+		                                        </label>
+												<%} %>
+		                                    </div>
+		                                </li>
+		                                <li>
+		                                    <span>Promotions:</span>
+		                                    <p>Free shipping</p>
+		                                </li>
+		                            </ul>
+		                        </div>
+		                    </div>
+		                </div>
+	                </form>
+	                
 	                <div class="col-lg-12">
 	                    <div class="product__details__tab">
 	                        <ul class="nav nav-tabs" role="tablist">
@@ -362,43 +372,34 @@
 		//장바구니 담기 요청을 비동기 방식으로 진행 
 		let p = new Promise(function(resolve , reject){
 			$.ajax({
-				url:"/cart/add?product_id="+product_id,
-				method:"GET",
+				url:"/cart/add",
+				method:"POST",
+				data:$("#detail-form").serialize(), //폼의 파라미터들을 전송할수 있는 문자열로 변환 
 				success:function(result, status, xhr){
 					//비동기 요청이 성공했음을 Promise에게 알려주어야 하므로,  resolve()호출 			
-					resolve();
+					//resolve();
+					resolve(result.msg);
 				},
 				error:function(xhr, status, err){
 					//비동기 요청이 실패했음을 Promise에게 알려주어야 하므로,  reject()호출
-					reject();
+					//reject();
+					//console.log(xhr.responseText);
+					let obj=JSON.parse(xhr.responseText);
+					reject(obj.msg);
 				}
 			});			
 		});
 		
-		p.then(function(){
-			console.log("장바구니 담기 성공 ");
+		p.then(function(msg){
+			if(confirm(msg+"\n장바구니로 이동하시겠어요?")){
+				location.href="/cart/main";
+			}
 		});
 		
-		p.catch(function(){
-			console.log("장바구니 담기 실패");
+		p.catch(function(msg){
+			alert(msg);
 		});
 	}
 	</script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -62,6 +62,14 @@ public class MemberController {
 		return "shop/member/login";
 	}
 	
+	@GetMapping("/member/logout")
+	public String logout(HttpSession session) {
+		
+		session.invalidate();
+		
+		return "redirect:/";
+	}
+	
 	//sns 로그인을 희망하는 유저들의  로그인 인증 요청 url 주소를 알려주는 컨트롤러 메서드 
 	//@PathVariable("provider") 는 url의 일부를 파라미터화 시키는 기법 , REST API 에 사용됨 
 	@GetMapping("/oauth2/authorize/{provider}")
