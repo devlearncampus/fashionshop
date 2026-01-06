@@ -5,12 +5,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ch.shop.dto.Cart;
 import com.ch.shop.dto.Member;
+import com.ch.shop.dto.ResponseMessage;
 
 @Controller
 public class CartController {
@@ -52,7 +55,9 @@ public class CartController {
                                          단점 - 메모리 용량이 많이 차지                                                                                                          		
 	 * */
 	@GetMapping("/cart/add")
-	public String addCart(@RequestParam(defaultValue="0") int product_id , HttpSession session) {
+	@ResponseBody //만일 @ResponseBody 가 붙어있지 않으면?  DispatcherServlet은 InternalResourceViewResolver에게 리턴된 스트링값을 이용하여 
+							//실제 jsp를 얻어오려고 할 것이다  ex) WEB-INF/views/등록성공.jsp 
+	public ResponseEntity<ResponseMessage> addCart(@RequestParam(defaultValue="0") int product_id , HttpSession session) {
 		
 		//클라이언트가 전송한 상품의 product_id, 갯수를 이용하여 Cart 생성하고 보관...
 		//그리고 이 생성된 Cart 인스턴스를 세션에 저장...
@@ -68,12 +73,14 @@ public class CartController {
 		
 		session.setAttribute("cart", map);
 		
-		return null;
+		ResponseMessage msg = new ResponseMessage();
+		msg.setMsg("장바구니에 상품이 담겼습니다");
+		//이 시점에 jackson 라이브러리를 개발자가 직접 사용하는것 아니라, @ResponseBody에 의해 내부적으로 작동함 
+		
+		//스프링에서 지원하는 HTTP 응답 전용 객체(head+body 구성해줌 )
+		return ResponseEntity.ok(msg);  
 	} 
-	
-	
 }
-
 
 
 
