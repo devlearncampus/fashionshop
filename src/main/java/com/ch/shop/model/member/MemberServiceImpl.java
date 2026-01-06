@@ -32,6 +32,8 @@ public class MemberServiceImpl implements MemberService{
 			//이메일 발송 예정 (카카오의 경우만 제외..)			
 		}else {
 			//sns의 회원의 경우 자신의 프로필을 변경할 수있기 때문에, 우리의 mysql도 그 정보에 맞게 동기화시켜야 함 ..
+			//단, 넘겨받은 member 에는 member_id가 누락되어있으므로, 기존 회원정보를 가진 객체인 obj로 부터 꺼내와서 넣어주면 됨 
+			member.setMember_id(obj.getMember_id());
 			memberDAO.update(member);
 			log.debug("기존 회원 업데이트 처리");
 		}

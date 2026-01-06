@@ -377,7 +377,9 @@
 			$.ajax({
 				url:"/cart/add",
 				method:"POST",
-				data:"product_id="+product_id+"&product_name="+$("input[name='product_name']").val()+"&price="+$("input[name='price']").val()+"&ea="+$("input[name='ea']").val() , //post 방식의 전송시 파라미터 문자열을 대입
+				//파라미터를 개발자가 일일이 명시하지 않고, form에 속한 컴포넌트들을 대상으로 전송할수 있는 파라미터 문자열로 대신 처리해주는 JQuery Ajax의 기술이 있음
+				data:$("#detail-form").serialize() , 
+				//data:"product_id="+product_id+"&product_name="+$("input[name='product_name']").val()+"&price="+$("input[name='price']").val()+"&ea="+$("input[name='ea']").val() , //post 방식의 전송시 파라미터 문자열을 대입
 				success:function(result, status, xhr){
 					//비동기 요청이 성공했음을 Promise에게 알려주어야 하므로,  resolve()호출 			
 					resolve(result.msg);

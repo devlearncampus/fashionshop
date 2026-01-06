@@ -1,12 +1,15 @@
 package com.ch.shop.controller.shop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,22 +24,23 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class CartController {
 	
-	//장바구니 메인 요청 처리 
+	//장바구니 목록 요청 처리 
 	@GetMapping("/cart/main")
-	public String getMain(HttpSession session) {
+	public String getMain(HttpSession session, Model model) {
+		//3단계: 세션에 들어있는 cart 라는 key를 갖는 객체들을  List형태로 바꿔서 전달해주자 jsp까지 전달해야 함..
+		Map<Integer, Cart> cart=(Map)session.getAttribute("cart");
 		
-		String viewName="";
+		List cartList = new ArrayList();//맵은 순서가 없으므로, 아래의 반복문을 이용하여 꺼내진 Cart DTO를 리스트에 담자
 		
-		//로그인 세션 체크 
-		Member member=(Member)session.getAttribute("member");
-		
-		if(member ==null) {//로그인 하지 않은 경우...
-			viewName="shop/member/login";//로그인 폼을 보여줌 
-		}else {//로그인 한 경우..
-			viewName="shop/cart/list";//장바구니를 보여줌 
+		for(Map.Entry<Integer, Cart> entry  :  cart.entrySet()) {
+			log.debug("키는 {}, 값은 {}", entry.getKey(), entry.getValue());
+			cartList.add(entry.getValue());
 		}
 		
-		return viewName;
+		//4단계: jsp에서 보여질 결과 저장
+		model.addAttribute("cartList", cartList);
+		
+		return "shop/cart/list";
 	}
 	
 	/*
@@ -61,7 +65,11 @@ public class CartController {
 	@ResponseBody //만일 @ResponseBody 가 붙어있지 않으면?  DispatcherServlet은 InternalResourceViewResolver에게 리턴된 스트링값을 이용하여 
 							//실제 jsp를 얻어오려고 할 것이다  ex) WEB-INF/views/등록성공.jsp 
 	public ResponseEntity<ResponseMessage> addCart(Cart cart , HttpSession session) {
-		
+		//장바구니에 담게될 정보 중 누가? 에 해당하는 member_id는 클라이언트의 브라우저로 보안상 넘겨받지 말고, 
+		//세션에서 꺼내서 Cart DTO에 담자주자 
+		Member member=(Member)session.getAttribute("member");
+		log.debug("현재 세션의 Member DTO안에 들어있는 member_id는 {}", member.getMember_id());
+		cart.setMember_id(member.getMember_id());
 		
 		log.debug("product_id ={}", cart.getProduct_id());
 		log.debug("product_name ={}", cart.getProduct_name());
@@ -69,7 +77,7 @@ public class CartController {
 		log.debug("ea ={}", cart.getEa());
 		
 		Map map = new HashMap<Integer, Cart>();
-		
+		map.put(cart.getProduct_id(), cart);
 		session.setAttribute("cart", map);
 		
 		ResponseMessage msg = new ResponseMessage();
