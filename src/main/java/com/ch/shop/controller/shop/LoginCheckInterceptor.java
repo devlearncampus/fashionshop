@@ -24,13 +24,21 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 		//로그인 하지 않았을 경우, 가던길 가는게 아니라, 로그인 폼으로 강제전환 
 		if(session==null || session.getAttribute("member")==null) {
 			
-			if() { // 비동기로 요청이 들어온 경우... 응답메시지로 처리...(JSON)
+			String asyncHeader=request.getHeader("X-Requested-With");
+			
+			if(asyncHeader!=null && asyncHeader.equals("XMLHttpRequest")) { // 비동기로 요청이 들어온 경우... 응답메시지로 처리...(JSON)
+				response.setContentType("application/json; charset=UTF-8");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//서버의 응답 상태코드
+				/*
+				{
+					"msg":"로그인이 필요한 서비스입니다"
+				} 
+				*/
+				response.getWriter().write("{ \"msg\" : \"로그인이 필요한 서비스입니다\" }");
 				
 			}else {//동기로 요청이 들어온 경우 , 응답페이지로 처리 ..
 				response.sendRedirect("/member/loginform");//동기로 들어왔을때의 처리...
-				
-			}
-			
+			}	
 			return false;
 		}
 		//원래 요청을 그대로 진행하고 싶다면 true, 진행을 막으려면 false

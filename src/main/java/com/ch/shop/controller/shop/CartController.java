@@ -8,13 +8,16 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ch.shop.dto.Cart;
 import com.ch.shop.dto.Member;
 import com.ch.shop.dto.ResponseMessage;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class CartController {
 	
@@ -54,20 +57,16 @@ public class CartController {
                                                  않아도 됨(마침 쿠키처럼)
                                          단점 - 메모리 용량이 많이 차지                                                                                                          		
 	 * */
-	@GetMapping("/cart/add")
+	@PostMapping("/cart/add")
 	@ResponseBody //만일 @ResponseBody 가 붙어있지 않으면?  DispatcherServlet은 InternalResourceViewResolver에게 리턴된 스트링값을 이용하여 
 							//실제 jsp를 얻어오려고 할 것이다  ex) WEB-INF/views/등록성공.jsp 
-	public ResponseEntity<ResponseMessage> addCart(@RequestParam(defaultValue="0") int product_id , HttpSession session) {
+	public ResponseEntity<ResponseMessage> addCart(Cart cart , HttpSession session) {
 		
-		//클라이언트가 전송한 상품의 product_id, 갯수를 이용하여 Cart 생성하고 보관...
-		//그리고 이 생성된 Cart 인스턴스를 세션에 저장...
-		Cart cart = new Cart();
-
-		cart.setProduct_id(product_id);
-		cart.setEa(0); //넘겨받을 예정 
-		cart.setProduct_name(null); //상품명을 넘겨 받아야 함 
-		cart.setFilename(null);//넘겨받을 예정 
-		cart.setPrice(0);//넘겨받을 예정  
+		
+		log.debug("product_id ={}", cart.getProduct_id());
+		log.debug("product_name ={}", cart.getProduct_name());
+		log.debug("price ={}", cart.getPrice());
+		log.debug("ea ={}", cart.getEa());
 		
 		Map map = new HashMap<Integer, Cart>();
 		
