@@ -76,9 +76,25 @@ public class CartController {
 		log.debug("price ={}", cart.getPrice());
 		log.debug("ea ={}", cart.getEa());
 		
-		Map map = new HashMap<Integer, Cart>();
-		map.put(cart.getProduct_id(), cart);
-		session.setAttribute("cart", map);
+		//세션에 cart 라는 키가 존재하는지를 먼저 따져봐서 
+		//없다면 새로 만들고, 있다면 기존것을 얻어와서 사용하자 
+		Map<Integer, Cart> map=null;
+		if(session.getAttribute("cart")==null) {
+			map = new HashMap<>();
+			session.setAttribute("cart", map);
+		}else {//즉, 이미 있으면 기존꺼 꺼내기 
+			map=(Map)session.getAttribute("cart"); //꺼내오기 
+		}
+		
+		//꺼내온 맵내에서도, 이미 등록된 상품이면 갯수만 증가시켜야하고, 등록되지 않은 상품이면 새로 등록
+		Cart obj=(Cart)map.get(cart.getProduct_id());
+		
+		if(obj==null) {//아직 장바구니에 등록된 적이 없는 상품..
+			map.put(cart.getProduct_id(), cart);
+		}else{ //사용자가 이미 장바구니에 등록한 상품..
+			//새로 등록하지 말고,즉 대체하지 말고 갯수를 누적(넘겨받은 수만큼)
+			obj.setEa(obj.getEa()+cart.getEa());// 갯수 누적 
+		}
 		
 		ResponseMessage msg = new ResponseMessage();
 		msg.setMsg("장바구니에 상품이 담겼습니다");
