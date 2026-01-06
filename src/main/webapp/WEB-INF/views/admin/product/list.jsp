@@ -100,7 +100,7 @@
 	                      	<img src="/photo/p<%=product.getProduct_id()%>/<%=productImg.getFilename()%>" width="30px">
 	                      </td>
 	                      <td><%=product.getSubCategory().getSubname() %></td>
-	                      <td><%=product.getProduct_name() %></td>
+	                      <td><a href="/admin/product/detail?product_id=<%=product.getProduct_id()%>"><%=product.getProduct_name() %></a></td>
 	                      <td><%=product.getBrand() %></td>
 	                      <td><%=product.getPrice() %></td>
 	                      <td><%=product.getDiscount() %></td>
