@@ -23,7 +23,14 @@ public class LoginCheckInterceptor implements HandlerInterceptor{
 		
 		//로그인 하지 않았을 경우, 가던길 가는게 아니라, 로그인 폼으로 강제전환 
 		if(session==null || session.getAttribute("member")==null) {
-			response.sendRedirect("/member/loginform");
+			
+			if() { // 비동기로 요청이 들어온 경우... 응답메시지로 처리...(JSON)
+				
+			}else {//동기로 요청이 들어온 경우 , 응답페이지로 처리 ..
+				response.sendRedirect("/member/loginform");//동기로 들어왔을때의 처리...
+				
+			}
+			
 			return false;
 		}
 		//원래 요청을 그대로 진행하고 싶다면 true, 진행을 막으려면 false

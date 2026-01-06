@@ -44,6 +44,7 @@
                             	<a href="/member/loginform">MyPage</a>
                             	<%Member member = (Member)session.getAttribute("member"); %>
                             	<a href="#"><%=member.getName() %></a>
+                            	<a href="/member/logout">Logout</a>
                             <%} %>
                         </div>
                         <ul class="header__right__widget">
