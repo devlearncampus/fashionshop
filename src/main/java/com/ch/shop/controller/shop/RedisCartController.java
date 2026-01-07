@@ -2,6 +2,7 @@ package com.ch.shop.controller.shop;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import com.ch.shop.dto.Cart;
 import com.ch.shop.dto.Member;
 import com.ch.shop.dto.ResponseMessage;
 import com.ch.shop.exception.CartException;
+import com.ch.shop.model.order.CartService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class RedisCartController {
+	
+	@Autowired
+	private CartService cartService;
 	
 	//장바구니 등록 비동기 요청을 처리 
 	@PostMapping("/cart/regist")
@@ -32,6 +37,9 @@ public class RedisCartController {
 		log.debug("member_id is {}", cart.getMember_id());
 		log.debug("product_id is {}", cart.getProduct_id());
 		log.debug("ea is {}", cart.getEa());
+		
+		//3단계: 일 시키기 
+		cartService.regist(cart);
 		
 		ResponseMessage message = new ResponseMessage();
 		message.setMsg("장바구니 등록 성공");
