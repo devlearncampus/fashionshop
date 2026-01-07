@@ -1,10 +1,4 @@
-<%@page import="com.ch.shop.util.MoneyConverter"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ page import="com.ch.shop.dto.Cart" %>
-<%@ page import="java.util.List" %>
-<%
-	List<Cart> cartList=(List)request.getAttribute("cartList");
-%>
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
@@ -66,7 +60,7 @@
     <!-- BreadCrumb End -->
     
     <!-- Cart Begin -->
-	<section class="shop-cart spad">
+	<section class="shop-cart spad" id="app">
 	        <div class="container">
 	            <div class="row">
 	                <div class="col-lg-12">
@@ -82,12 +76,14 @@
 	                                </tr>
 	                            </thead>
 	                            <tbody>
-	                            	<%for(Cart cart  : cartList){%>
-	                                <tr>
+	                            	
+	                            	<!-- 아래의 div 안에 영역을 Vue 의 영향력 하에 두겠다 -->
+	                            	
+	                                <tr v-for="index in cartList">
 	                                    <td class="cart__product__item">
 	                                        <img src="img/shop-cart/cp-1.jpg" alt="">
 	                                        <div class="cart__product__item__title">
-	                                            <h6><%=cart.getProduct_name() %></h6>
+	                                            <h6>청바지</h6>
 	                                            <div class="rating">
 	                                                <i class="fa fa-star"></i>
 	                                                <i class="fa fa-star"></i>
@@ -97,16 +93,16 @@
 	                                            </div>
 	                                        </div>
 	                                    </td>
-	                                    <td class="cart__price"><%=MoneyConverter.format(cart.getPrice()) %></td>
+	                                    <td class="cart__price">가격올 곳</td>
 	                                    <td class="cart__quantity">
 	                                        <div class="pro-qty"><span class="dec qtybtn">-</span>
-	                                            <input type="text" value="<%=cart.getEa() %>">
+	                                            <input type="text" value="0">
 	                                        <span class="inc qtybtn">+</span></div>
 	                                    </td>
-	                                    <td class="cart__total"><%=MoneyConverter.format(cart.getPrice()*cart.getEa()) %></td>
+	                                    <td class="cart__total">서브토탈</td>
 	                                    <td class="cart__close"><span class="icon_close"></span></td>
 	                                </tr>
-	                            	<%}%>
+	                            	
 	                            </tbody>
 	                        </table>
 	                    </div>
@@ -159,6 +155,39 @@
 	
 	<!-- Js Plugins -->
 	<%@ include file="../inc/footer_link.jsp" %>
+	<!-- Vue를 이용하면 개발자가 DOM 렌더링 시 전통적인 DOM 제어 보다 훨씬 효율적으로 처리가 가능 -->
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script>
+		//뷰 애플리케이션 객체를 생성하고, 원하는 렌더링 영역인 div="app" 와 연결하자
+		const app=Vue.createApp({
+			/*아래의 data() 메서드는 뷰영역에서 사용할 데이터를 반환하는 역할*/
+			data(){
+				return{ //뷰 렌더링 영역에서 사용될 데이터를 반환 
+					cartList:3
+				}	
+			}
+		});
+		
+		let vm=app.mount("#app");
+		
+		//비동기 방식으로 장바구니 목록을 가져오자 
+		
+		function renderList(){
+
+		}
+	</script>
+	
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
