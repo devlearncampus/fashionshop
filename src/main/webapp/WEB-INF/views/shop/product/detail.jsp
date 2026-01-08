@@ -395,7 +395,8 @@
 		
 		p.then(function(msg){
 			 if(confirm(msg+"\n장바구니로 이동하시겠어요?")){
-				 location.href="/cart/main";
+				 //location.href="/cart/main";  세션기반의 장바구니 목록 요청
+				 location.href="/cart/list"; //RedistCartController에게 요청 
 			 }
 		});
 		
