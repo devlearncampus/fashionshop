@@ -50,8 +50,15 @@ public class RedisCartController {
 		return ResponseEntity.ok(message);
 	}
 	
-	//장바구니 목록 요청 처리 
+	//장바구니 페이지 요청 처리 
 	@GetMapping("/cart/list")
+	public String getListPage() {
+		return "shop/cart/list";
+	}
+	
+	
+	//장바구니 목록 비동기 요청 처리 
+	@GetMapping("/cart/async/list")
 	@ResponseBody //jackson library 알아서 List -->  json 배열로 자동변환 (convert)
 	public List getList(HttpSession session) { //cart 매개변수의 역할? 누구의(member_id) 
 		Member member = (Member)session.getAttribute("member");

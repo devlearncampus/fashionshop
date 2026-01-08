@@ -162,7 +162,9 @@
 		const app=Vue.createApp({
 			/*아래의 data() 메서드는 뷰영역에서 사용할 데이터를 반환하는 역할*/
 			data(){
-				return{ //뷰 렌더링 영역에서 사용될 데이터를 반환 
+				return{ //뷰 렌더링 영역에서 사용될 데이터를 반환
+					//아래의 cartList는 일반 변수가 아니라, data() 함수의 반환대상이 되는 상태변수로써, 
+					//Vue 애플리케이션의 렌더링 영역과(즉 MVC에서의 View영역과 직접적으로 연결되어 있는 변수 - 바인딩(binding) 변수)
 					cartList:3
 				}	
 			}
@@ -170,7 +172,31 @@
 		
 		let vm=app.mount("#app");
 		
-		//비동기 방식으로 장바구니 목록을 가져오자 
+		//비동기 방식으로 장바구니 목록을 요청하기
+		function getList(){
+			let p = new Promise((resolve, reject)=>{
+				//개발자가 원하는 비동기작업=ajax 
+				$.ajax({
+					url :"/cart/async/list", //RedisCartController 에 요청이 들어감
+					method:"GET",
+					success:function(result, status, xhr){
+						resolve(result); // Promise객체의 상태 값을 fulfilled로 놓기
+						//개발자가 Promise의 상태를 resolve() 호출에 의해 fulfilled상태로 놓아놓으면
+						//비동기 업무가 종료되었을때, 자동으로 Promise가 지원하는 메서드인 then()을 호출하게 됨
+						//또한reject() 호출에 의해서 Promise의 상태가 rejected가 되면, 비동기로직이 완료된 후 자동으로 
+						//Promise가 지원하는 메서드 중 catch() 가 호출된다..
+						//따라서 개발자는 콜백함수에서 로직을처리하지 않게 되어, 콜백 지옥에서 빠져나올수있다...
+					}
+				});
+			}).then((result)=>{
+				console.log("서버에서 가져온 목록은 ",  result);
+			});	//체이닝 기법 (별도의 변수 선언없이 바로 그 다음 메서드를 연결하는 방식 - 자전거 체인과 유사 )
+			
+		}
+		
+		$(()=>{
+			getList();			
+		});
 		
 		function renderList(){
 
