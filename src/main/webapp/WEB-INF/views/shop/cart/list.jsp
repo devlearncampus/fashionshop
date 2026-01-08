@@ -77,29 +77,30 @@
 	                            </thead>
 	                            <tbody>
 	                            	
-	                            	<!-- 아래의 div 안에 영역을 Vue 의 영향력 하에 두겠다 -->
+	                            	<!-- 아래의 div 안에 영역을 Vue 의 영향력 하에 두겠다 
+	                            		아래의 반복문의 앞에 명시한 소괄호의 (인수1, 인수2)
+	                            		인수1: 배열내에서의 한 요소 
+	                            		인수2 : 배열의 반복횟수인 index
+	                            		
+	                            		:key의 역할은 가상돔을 효율적으로 처리하기 위해서는 개발자가 반복문 수행시 
+	                            		해당 돔객체에 유일한 키값을 부여하는것이 좋다..
+	                            		아래에서는 유일한 값이 상품의 pk이므로, key값으로 활용함 
+	                            	-->
 	                            	
-	                                <tr v-for="index in cartList">
+	                                <tr v-for="(cart, index) in cartList" :key="cart.product_id">
 	                                    <td class="cart__product__item">
 	                                        <img src="img/shop-cart/cp-1.jpg" alt="">
 	                                        <div class="cart__product__item__title">
-	                                            <h6>청바지</h6>
-	                                            <div class="rating">
-	                                                <i class="fa fa-star"></i>
-	                                                <i class="fa fa-star"></i>
-	                                                <i class="fa fa-star"></i>
-	                                                <i class="fa fa-star"></i>
-	                                                <i class="fa fa-star"></i>
-	                                            </div>
+	                                            <h6>{{cart.product_name}}</h6>
 	                                        </div>
 	                                    </td>
-	                                    <td class="cart__price">가격올 곳</td>
+	                                    <td class="cart__price">{{moneyFormat(cart.price)}}</td>
 	                                    <td class="cart__quantity">
 	                                        <div class="pro-qty"><span class="dec qtybtn">-</span>
-	                                            <input type="text" value="0">
+	                                            <input type="text" v-model="cart.ea">
 	                                        <span class="inc qtybtn">+</span></div>
 	                                    </td>
-	                                    <td class="cart__total">서브토탈</td>
+	                                    <td class="cart__total">{{ moneyFormat(cart.price*cart.ea) }}</td>
 	                                    <td class="cart__close"><span class="icon_close"></span></td>
 	                                </tr>
 	                            	
@@ -156,8 +157,11 @@
 	<!-- Js Plugins -->
 	<%@ include file="../inc/footer_link.jsp" %>
 	<!-- Vue를 이용하면 개발자가 DOM 렌더링 시 전통적인 DOM 제어 보다 훨씬 효율적으로 처리가 가능 -->
+	
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="/static/lib.js"></script>	
 	<script>
+		let vm;
 		//뷰 애플리케이션 객체를 생성하고, 원하는 렌더링 영역인 div="app" 와 연결하자
 		const app=Vue.createApp({
 			/*아래의 data() 메서드는 뷰영역에서 사용할 데이터를 반환하는 역할*/
@@ -165,12 +169,20 @@
 				return{ //뷰 렌더링 영역에서 사용될 데이터를 반환
 					//아래의 cartList는 일반 변수가 아니라, data() 함수의 반환대상이 되는 상태변수로써, 
 					//Vue 애플리케이션의 렌더링 영역과(즉 MVC에서의 View영역과 직접적으로 연결되어 있는 변수 - 바인딩(binding) 변수)
-					cartList:3
+					cartList:0
 				}	
+			}, 
+			// Vue에서 개발자가 자신만의 메서드를 정의하려면, 아래의 methods 영역에 정의하면된다..
+			methods:{
+				//나만의 메서드 정의
+				moneyFormat(price){
+					return format(price);
+				}
+				
 			}
 		});
 		
-		let vm=app.mount("#app");
+		vm=app.mount("#app");
 		
 		//비동기 방식으로 장바구니 목록을 요청하기
 		function getList(){
@@ -190,7 +202,10 @@
 				});
 			}).then((result)=>{
 				console.log("서버에서 가져온 목록은 ",  result);
+				vm.cartList = result;
 			});	//체이닝 기법 (별도의 변수 선언없이 바로 그 다음 메서드를 연결하는 방식 - 자전거 체인과 유사 )
+			
+			
 			
 		}
 		
